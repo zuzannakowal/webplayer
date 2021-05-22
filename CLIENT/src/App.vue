@@ -9,13 +9,13 @@
       </div>
     </div>
     <div>
-      <player></player>
+      <player :songs="piosenki"></player>
     </div>
   </div>
 </template>
 <script>
   import Albums from "./components/Albums.vue";
-  import Songs from "./components/Songs.vue"
+  import Songs from "./components/Songs.vue";
   import Player from "./components/Player.vue"
   export default {
     data(){
