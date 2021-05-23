@@ -6,18 +6,18 @@
       :song="song"
     ></song-name>
     <play></play>
-    <time></time>
+    <clock></clock>
 
   </div>
 </template>
 <script>
   import SongName from "./SongName.vue";
   import Play from "./Play.vue";
-  import Time from "./Time.vue"
+  import Clock from "./Time.vue";
   export default {
-    components: {SongName, Play, Time},
+    components: {SongName, Play, Clock},
     props: ['songs'],
-  }
+  };
 </script>
 <style scoped>
   .player{

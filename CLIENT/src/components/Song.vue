@@ -1,6 +1,6 @@
 <template>
   <div>
-    piosenka: {{song.tytul}}
+    {{song.id}} {{song.tytul}} {{song.size}}
   </div>
 </template>
 <script>
