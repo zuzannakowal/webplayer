@@ -1,6 +1,7 @@
 <template>
   <div class="scroll">
     <album
+      @albumClicked="albumClicked"
       v-for="album in albums"
       v-bind:key="album.id"
       :album="album"
@@ -12,6 +13,12 @@
   export default {
     components: {Album},
     props: ['albums'],
+    methods: {
+      albumClicked(val){
+        console.log("album: ", val)
+        this.$emit("albumSelected", val)
+      }
+    }
   }
 </script>
 <style>

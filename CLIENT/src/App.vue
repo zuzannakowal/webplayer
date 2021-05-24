@@ -2,14 +2,20 @@
   <div id="app">
     <div class="gora">
       <div class="albums">
-        <albums :albums="plyty"></albums>
+        <albums
+          @albumSelected="albumSelected"
+          :albums="plyty"
+        ></albums>
       </div>
       <div class="songs">
-        <songs :songs="piosenki"></songs>
+        <songs ref="songs" :songs="piosenki"></songs>
       </div>
     </div>
     <div>
       <player :songs="piosenki"></player>
+    </div>
+    <div>
+      debug: {{currentAlbum}}
     </div>
   </div>
 </template>
@@ -35,15 +41,16 @@
           {id: 1, plytaId: "1", tytul:"take on me",size:"9.83"},
           {id: 4, plytaId: "1", tytul:"another brick", size:"3.17"},
           {id: 2, plytaId: "3", tytul:"take on me",size:"8.32"}
-        ]
+        ],
+        currentAlbum: null
       };
     },
     components: {Albums, Songs, Player},
     methods: {
-      zmianaSelektora: function(val){
-        console.log('parent called')
-        this.selector = val
-        console.log(val)
+      albumSelected(albumId){
+        console.log("album: ", albumId)
+        this.currentAlbum = albumId
+        this.$refs.songs.displayAlbum(albumId)
       }
     }
   };

@@ -9,6 +9,7 @@
     methods: {
       click(val){
         console.log("klik", val)
+        this.$emit("albumClicked", val)
       }
     }
   }

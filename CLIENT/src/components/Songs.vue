@@ -1,8 +1,9 @@
 <template>
   <div class="scroll">
-    lista piosenek:
+    lista piosenek: {{currentAlbumId}}
     <song
       v-for="song in songs"
+      v-if="song.plytaId == currentAlbumId"
       v-bind:key="song.id"
       :song="song"
     ></song>
@@ -13,6 +14,17 @@
   export default {
     components: {Song},
     props: ['songs'],
+    data() {
+      return {
+        currentAlbumId: null
+      }
+    },
+    methods: {
+      displayAlbum(albumId){
+        console.log("wyswietlam album: ", albumId)
+        this.currentAlbumId = albumId
+      }
+    }
   }
 </script>
 <style scoped>
