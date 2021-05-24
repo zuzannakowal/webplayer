@@ -1,12 +1,16 @@
 <template>
   <div class="scroll">
-    lista piosenek: {{currentAlbumId}}
-    <song
-      v-for="song in songs"
-      v-if="song.plytaId == currentAlbumId"
-      v-bind:key="song.id"
-      :song="song"
-    ></song>
+    lista piosenek: {{currentAlbumId}}, {{currentPlaylist}}, {{currentSongId}}
+    <div v-if="currentPlaylist.length">
+      <song
+        v-for="song in currentPlaylist"
+        v-bind:key="song.id"
+        :song="song"
+      ></song>
+    </div>
+    <div v-else>
+      no songs
+    </div>
   </div>
 </template>
 <script>
@@ -16,13 +20,23 @@
     props: ['songs'],
     data() {
       return {
-        currentAlbumId: null
+        currentAlbumId: null,
+        currentSongId: null,
+        currentPlaylist: []
       }
     },
     methods: {
       displayAlbum(albumId){
         console.log("wyswietlam album: ", albumId)
         this.currentAlbumId = albumId
+        this.currentPlaylist.splice(0)
+        for (let i in this.songs){
+          console.log(this.songs[i], i)
+          if (this.songs[i].plytaId == albumId){
+            this.currentPlaylist.push(this.songs[i])
+          }
+        }
+        console.log(this.currentPlaylist)
       }
     }
   }
