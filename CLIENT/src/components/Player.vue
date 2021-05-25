@@ -1,22 +1,57 @@
 <template>
   <div class="player">
-    <song-name
-      v-for="song in songs"
-      v-bind:key="song.id"
-      :song="song"
-    ></song-name>
-    <play></play>
+    <div v-if="currentSong !== null">
+      {{currentSong.tytul}} ({{currentSong.id}})
+    </div>
+    <div class="play">
+      <div @click="previous">
+        &#8884;
+      </div>
+      <div @click="playClicked">
+        &#8883;
+      </div>
+      <div @click="next">
+        &#8885;
+      </div>
+    </div>
     <clock></clock>
 
   </div>
 </template>
 <script>
   import SongName from "./SongName.vue";
-  import Play from "./Play.vue";
   import Clock from "./Time.vue";
   export default {
-    components: {SongName, Play, Clock},
+    components: {SongName, Clock},
     props: ['songs'],
+    data: function(){
+      return {
+        currentSong: null
+      }
+    },
+    methods: {
+      previous(){
+        console.log("prev")
+        this.$emit("prev")
+      },
+      playClicked(){
+        console.log("playClicked")
+      },
+      next(){
+        console.log("next")
+        this.$emit("next")
+      },
+      playSong(songId){
+        console.log("playing song: ", songId)
+        for (let i in this.songs){
+          if (this.songs[i].id == songId){
+            console.log(this.songs[i])
+            this.currentSong = this.songs[i]
+            break;
+          }
+        }
+      }
+    }
   };
 </script>
 <style scoped>
@@ -24,7 +59,12 @@
     height: 100px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-
+    justify-content: space-around;
+  }
+  .play{
+    font-size: 25px;
+    border: solid black 1px;
+    display: flex;
+    justify-content: flex-start;
   }
 </style>

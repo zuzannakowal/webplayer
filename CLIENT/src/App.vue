@@ -8,11 +8,14 @@
         ></albums>
       </div>
       <div class="songs">
-        <songs ref="songs" :songs="piosenki"></songs>
+        <songs
+          @songSelected="songSelected"
+          ref="songs"
+          :songs="piosenki"></songs>
       </div>
     </div>
     <div>
-      <player :songs="piosenki"></player>
+      <player @prev="prev" @next="next" ref="player" :songs="piosenki"></player>
     </div>
     <div>
       debug: {{currentAlbum}}
@@ -40,7 +43,8 @@
         piosenki: [
           {id: 1, plytaId: "1", tytul:"take on me",size:"9.83"},
           {id: 4, plytaId: "1", tytul:"another brick", size:"3.17"},
-          {id: 2, plytaId: "3", tytul:"take on me",size:"8.32"}
+          {id: 1, plytaId: "1", tytul:"take on me",size:"9.83"},
+          {id: 2, plytaId: "3", tytul:"just give me a reason",size:"8.32"}
         ],
         currentAlbum: null
       };
@@ -51,6 +55,17 @@
         console.log("album: ", albumId)
         this.currentAlbum = albumId
         this.$refs.songs.displayAlbum(albumId)
+      },
+      songSelected(songId){
+        console.log("song selected: ", songId)
+        this.$refs.player.playSong(songId)
+      },
+      prev(){
+        console.log("app prev")
+      },
+      next(){
+        console.log("app next")
+        this.$refs.songs.playNext()
       }
     }
   };

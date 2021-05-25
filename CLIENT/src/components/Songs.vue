@@ -1,10 +1,10 @@
 <template>
   <div class="scroll">
-    lista piosenek: {{currentAlbumId}}, {{currentPlaylist}}, {{currentSongId}}
+    albumId: {{currentAlbumId}}, piosenek: {{currentPlaylist.length}}, pozycja: {{currentSongNum}}
     <div v-if="currentPlaylist.length">
-      <song
+      <song @songClicked="songClicked"
         v-for="song in currentPlaylist"
-        v-bind:key="song.id"
+        v-bind:key="song.num"
         :song="song"
       ></song>
     </div>
@@ -21,7 +21,7 @@
     data() {
       return {
         currentAlbumId: null,
-        currentSongId: null,
+        currentSongNum: null,
         currentPlaylist: []
       }
     },
@@ -30,13 +30,35 @@
         console.log("wyswietlam album: ", albumId)
         this.currentAlbumId = albumId
         this.currentPlaylist.splice(0)
+        let j = 0
         for (let i in this.songs){
-          console.log(this.songs[i], i)
           if (this.songs[i].plytaId == albumId){
-            this.currentPlaylist.push(this.songs[i])
+            let tmpSong = this.songs[i]
+            let idx = this.currentPlaylist.push(tmpSong)
+            this.$set(this.currentPlaylist[idx-1],'playing', 0);
+            this.$set(this.currentPlaylist[idx-1],'num', j);
+            j++
           }
         }
         console.log(this.currentPlaylist)
+      },
+      songClicked(val){
+        console.log("(songs) songSelected: ", val, this.currentPlaylist[val], this.currentSongNum)
+        if (this.currentSongNum !== null){
+          this.currentPlaylist[this.currentSongNum].playing = 0
+        }
+        this.currentSongNum = val
+        this.currentPlaylist[val].playing = 1
+        console.log("songs: ", this.currentPlaylist)
+        //this.$forceUpdate();
+        this.$emit("songSelected", this.currentPlaylist[val].id)
+      },
+      playNext(){
+        if (this.currentSongNum + 1 >= this.currentPlaylist.length){
+          console.log("koniec listy")
+          return
+        }
+        this.songClicked(this.currentSongNum+1)
       }
     }
   }
