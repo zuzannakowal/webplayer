@@ -27,8 +27,10 @@
     },
     methods: {
       displayAlbum(albumId){
+        // to do: reload grającego albumu
         console.log("wyswietlam album: ", albumId)
         this.currentAlbumId = albumId
+        this.currentSongNum = null
         this.currentPlaylist.splice(0)
         let j = 0
         for (let i in this.songs){
@@ -53,8 +55,26 @@
         //this.$forceUpdate();
         this.$emit("songSelected", this.currentPlaylist[val].id)
       },
+      playPrevious(){
+        if (this.currentSongNum === null){
+          console.log("nic nie gra")
+          return
+        }
+        if (this.currentSongNum == 0){
+          console.log("początek listy")
+          this.songClicked(0)
+          return
+        }
+        this.songClicked(this.currentSongNum-1)
+      },
       playNext(){
-        if (this.currentSongNum + 1 >= this.currentPlaylist.length){
+        if (this.currentSongNum === null){
+          console.log("nic nie gra")
+          return
+        }
+        if (this.currentSongNum + 1 == this.currentPlaylist.length){
+          this.currentPlaylist[this.currentSongNum].playing = 0
+          this.currentSongNum = null
           console.log("koniec listy")
           return
         }

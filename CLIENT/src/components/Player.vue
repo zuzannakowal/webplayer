@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    <div v-if="currentSong !== null">
+    <div class="song" v-if="currentSong !== null">
       {{currentSong.tytul}} ({{currentSong.id}})
     </div>
     <div class="play">
@@ -8,11 +8,14 @@
         &#8884;
       </div>
       <div @click="playClicked">
-        &#8883;
+        <div v-if="currentSong === null">&#8883;</div>
+        <div v-if="currentSong !== null && currentSong.playing == 0">&#8883;</div>
+        <div v-if="currentSong !== null && currentSong.playing == 1">II</div>
       </div>
       <div @click="next">
         &#8885;
       </div>
+      <audio id="mp3player" controls ref="mp3player" style="visibility:hidden;"></audio>
     </div>
     <clock></clock>
 
@@ -29,16 +32,39 @@
         currentSong: null
       }
     },
+    mounted(){
+      console.log("player zamontowany")
+      this.$nextTick(function(){
+        console.log("view zrenderowany")
+        this.$refs.mp3player.addEventListener("ended", function(e){
+          console.log("utwór sie skończył")
+          this.next()
+        }.bind(this)
+        )
+      })
+    },
     methods: {
       previous(){
         console.log("prev")
+        this.$refs.mp3player.pause()
         this.$emit("prev")
       },
       playClicked(){
         console.log("playClicked")
+        console.log(this.currentSong)
+        if (this.currentSong.playing == 1){
+          console.log("pause")
+          this.currentSong.playing = 0
+          this.$refs.mp3player.pause()
+        } else {
+          this.currentSong.playing = 1
+          console.log("resume")
+          this.$refs.mp3player.play()
+        }
       },
       next(){
         console.log("next")
+        this.$refs.mp3player.pause()
         this.$emit("next")
       },
       playSong(songId){
@@ -50,6 +76,9 @@
             break;
           }
         }
+        this.$refs.mp3player.src = this.currentSong.uri
+        this.$refs.mp3player.load()
+        this.$refs.mp3player.play()
       }
     }
   };
@@ -57,11 +86,15 @@
 <style scoped>
   .player{
     height: 100px;
-    width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+
+  }
+  .song{
+    width: 33%;
   }
   .play{
+    width: 33%;
     font-size: 25px;
     border: solid black 1px;
     display: flex;

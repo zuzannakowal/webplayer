@@ -41,10 +41,10 @@
           {id: 9, tytul: "the wall", zespol:"pink floyd",img:"https://lastfm.freetls.fastly.net/i/u/500x500/0f05cdb52e9242bd8dd4aa9cf1ce2fb7.jpg"},
         ],
         piosenki: [
-          {id: 1, plytaId: "1", tytul:"take on me",size:"9.83"},
-          {id: 4, plytaId: "1", tytul:"another brick", size:"3.17"},
-          {id: 1, plytaId: "1", tytul:"take on me",size:"9.83"},
-          {id: 2, plytaId: "3", tytul:"just give me a reason",size:"8.32"}
+          {id: 1, plytaId: "1", tytul:"take on me",size:"9.83", uri: "http://xn--odgosy-5db.pl/odglosy/swinia.mp3"},
+          {id: 4, plytaId: "1", tytul:"another brick", size:"3.17", uri: "http://odgłosy.pl/odglosy/swierszcz.mp3"},
+          {id: 7, plytaId: "1", tytul:"duck",size:"9.83", uri: "http://odgłosy.pl/odglosy/kaczki.mp3"},
+          {id: 2, plytaId: "3", tytul:"just give me a reason",size:"8.32", uri: "http://odgłosy.pl/odglosy/kon01.mp3"}
         ],
         currentAlbum: null
       };
@@ -62,6 +62,7 @@
       },
       prev(){
         console.log("app prev")
+        this.$refs.songs.playPrevious()
       },
       next(){
         console.log("app next")
