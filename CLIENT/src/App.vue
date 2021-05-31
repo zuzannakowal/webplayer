@@ -50,6 +50,16 @@
       };
     },
     components: {Albums, Songs, Player},
+    mounted(){
+      console.log("inicjacja aplikacji")
+      const headers = { "Content-Type": "application/json" }
+   
+      fetch("http://localhost:3000/albums", { method: "get", headers })
+        .then(response => {console.log("response: ", response);response.json()})
+        .then(
+            data => console.log(data) // dane odpowiedzi z serwera
+        )
+    },  
     methods: {
       albumSelected(albumId){
         console.log("album: ", albumId)
