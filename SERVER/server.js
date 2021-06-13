@@ -116,6 +116,12 @@ function fileResponse(req, response, path) {
   })
 }
 
+function fileUpload(req, res) {
+  console.log("File upload")
+  
+  res.end();
+}
+
 function initSongs() {
   let albumId = 0;
   let songId = 0;
@@ -193,7 +199,7 @@ var server = http.createServer(function (req, res) {
       } else if (req.url.endsWith(".mp3")) {
         console.log("daje piosenke")
         fileResponse(req, res, __dirname + decodeURI(req.url))
-      } else if (req.url == "/") {
+      } else if (req.url == "/" || req.url == "/admin") {
         fileResponse(req, res, "static/index.html")
       } else {
         res.writeHead(404);
@@ -203,17 +209,14 @@ var server = http.createServer(function (req, res) {
       }
       break;
     case "POST":
-      switch (req.url) {
-        case "/":
-          break;
-        default:
-          res.writeHead(404)
-          res.write("to nie istnieje")
-          res.end()
-          console.log("404")
+      if (req.url == "/upload") {
+        fileUpload(req, res)
+      } else {
+        res.writeHead(404)
+        res.write("to nie istnieje")
+        res.end()
+        console.log("404")
       }
-      break;
-
   }
 });
 
