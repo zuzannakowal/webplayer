@@ -5,10 +5,7 @@
         <albums @albumSelected="albumSelected" :albums="plyty"></albums>
       </div>
       <div class="songs">
-        <songs
-          @songSelected="songSelected"
-          ref="songs"
-        ></songs>
+        <songs @songSelected="songSelected" ref="songs"></songs>
       </div>
     </div>
     <div>
@@ -40,6 +37,7 @@ export default {
         console.log(data);
         this.plyty = data;
       });
+    this.albumSelected(0);
   },
   methods: {
     albumSelected(albumId) {
