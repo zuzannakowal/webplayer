@@ -91,8 +91,14 @@ export default {
   methods: {
     previous() {
       console.log("prev");
-      this.$refs.mp3player.pause();
-      this.$emit("prev");
+      // jak jest wiecej niz 2 sekundy od poczatku, to wracamy na poczatek piosenki
+      if (this.$refs.mp3player.currentTime > 2) {
+        this.$refs.mp3player.currentTime = 0;
+      } else {
+        // a jak mniej niz 3 sec, to poprzednia piosenka
+        this.$refs.mp3player.pause();
+        this.$emit("prev");
+      }
     },
     updateTimer(e) {
       this.time = e.target.currentTime;
