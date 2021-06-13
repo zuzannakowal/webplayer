@@ -1,7 +1,7 @@
 <template>
   <div class="scroll">
     albumId: {{ currentAlbumId }}, piosenek: {{ currentPlaylist.length }},
-    pozycja: {{ currentSongNum }}
+    pozycja: {{ currentSongNum }}, aktualna piosenka: {{ playingSongId }}
     <div v-if="currentPlaylist.length">
       <song
         @songClicked="songClicked"
@@ -22,6 +22,8 @@ export default {
       currentAlbumId: null,
       currentSongNum: null,
       currentPlaylist: [],
+      playingAlbumId: null,
+      playingSongId: null,
     };
   },
   methods: {
@@ -37,6 +39,15 @@ export default {
           let tmpSong = allSongs[i];
           let idx = this.currentPlaylist.push(tmpSong);
           this.$set(this.currentPlaylist[idx - 1], "playing", 0);
+          // sprawdzmy, czy to nie jest plyta, ktora wlasnie gra
+          if (this.currentAlbumId == this.playingAlbumId) {
+            //console.log("ciekawe... chyba teraz gramy ten album?");
+            if (this.playingSongId == tmpSong.id) {
+              console.log("oooo... gramy teraz te piosenke!", tmpSong.id);
+              this.currentPlaylist[idx - 1].playing = 1;
+              this.currentSongNum = idx - 1;
+            }
+          }
           this.$set(this.currentPlaylist[idx - 1], "num", j);
           j++;
         }
@@ -50,13 +61,20 @@ export default {
         this.currentPlaylist[val],
         this.currentSongNum
       );
+      // cancel playing icon for the song that was playing previously
       if (this.currentSongNum !== null) {
         this.currentPlaylist[this.currentSongNum].playing = 0;
       }
+      // dane nowej piosenki
       this.currentSongNum = val;
+      // zachowajmy albumid/songid na boku, jakbysmy wrocili do tej plyty
+      this.playingSongId = this.currentPlaylist[val].id;
+      this.playingAlbumId = this.currentAlbumId;
+
+      //zaznaczmy, ze piosenka gra
       this.currentPlaylist[val].playing = 1;
       console.log("songs: ", this.currentPlaylist);
-      //this.$forceUpdate();
+      // wymusmy zagranie piosenki na parencie
       this.$emit("songSelected", this.currentPlaylist[val].id);
     },
     playPrevious() {
