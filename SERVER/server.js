@@ -1,5 +1,6 @@
 var fs = require("fs");
 var http = require("http");
+var url = require("url")
 
 /*
 
@@ -31,7 +32,7 @@ var http = require("http");
 ]
 */
 var albumy = [
-  { id: 1, tytul: "ummagamma", zespol: "pink floyd", img: "https://lastfm.freetls.fastly.net/i/u/500x500/0f05cdb52e9242bd8dd4aa9cf1ce2fb7.jpg" },
+  { id: 1, tytul: "ummagamma", zespol: "pink floyd", img: "https://images-na.ssl-images-amazon.com/images/I/51yJTk7o%2BaL._SY1000_.jpg" },
   { id: 2, tytul: "ummagamma", zespol: "pink floyd", img: "https://lastfm.freetls.fastly.net/i/u/500x500/0f05cdb52e9242bd8dd4aa9cf1ce2fb7.jpg" },
   { id: 3, tytul: "ummagamma", zespol: "pink floyd", img: "https://lastfm.freetls.fastly.net/i/u/500x500/0f05cdb52e9242bd8dd4aa9cf1ce2fb7.jpg" },
   { id: 4, tytul: "ummagamma", zespol: "pink floyd", img: "https://lastfm.freetls.fastly.net/i/u/500x500/0f05cdb52e9242bd8dd4aa9cf1ce2fb7.jpg" },
@@ -61,14 +62,22 @@ function albumResponse(req, res) {
 
 function songsResponse(req, res) {
   var songs = piosenki;
-  console.log(songs);
+  const queryObject = url.parse(req.url, true).query
+  console.log("listuje piosenki z albumu: ", queryObject.albumId);
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.writeHead(200, { 'content-type': 'application/json;charset=utf-8' });
-  res.end(JSON.stringify(songs));
+  const album = []
+  for (let s in songs) {
+    if (songs[s].plytaId == queryObject.albumId) {
+      album.push(songs[s])
+    }
+  }
+  console.log("znalazlem ", album.length, "piosenek")
+  res.end(JSON.stringify(album));
 }
 
 var server = http.createServer(function (req, res) {
-  console.log(req.method,":", req.url)
-
+  console.log(req.method, ":", req.url)
   switch (req.method) {
     case "OPTIONS":
       console.log("options")
@@ -78,18 +87,15 @@ var server = http.createServer(function (req, res) {
       res.end();
       break;
     case "GET":
-      switch (req.url) {
-        case "/albums":
-          albumResponse(req, res)
-          break;
-        case "/songs":
-          songsResponse(req, res)
-          break;
-        default:
-          res.writeHead(404);
-          console.log("nie ma takiej stony")
-          res.write("nie ma takiej strony")
-          res.end()
+      if (req.url == "/albums") {
+        albumResponse(req, res)
+      } else if (req.url.startsWith("/songs")) {
+        songsResponse(req, res)
+      } else {
+        res.writeHead(404);
+        console.log("nie ma takiej stony")
+        res.write("nie ma takiej strony")
+        res.end()
       }
       break;
     case "POST":
