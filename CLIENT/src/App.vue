@@ -55,10 +55,8 @@
       const headers = { "Content-Type": "application/json" }
    
       fetch("http://localhost:3000/albums", { method: "get", headers })
-        .then(response => {console.log("response: ", response);response.json()})
-        .then(
-            data => console.log(data) // dane odpowiedzi z serwera
-        )
+        .then(response => response.json())
+        .then(data => console.log(data))
     },  
     methods: {
       albumSelected(albumId){
