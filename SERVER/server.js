@@ -1,7 +1,8 @@
 var fs = require("fs");
 var http = require("http");
 var url = require("url")
-
+var formidable = require("formidable")
+const { uuid } = require('uuidv4');
 const portNum = 3000
 
 /*
@@ -118,11 +119,36 @@ function fileResponse(req, response, path) {
 
 function fileUpload(req, res) {
   console.log("File upload")
-  
-  res.end();
+  let form = formidable({})
+  let files = []
+  form.on('file', function (field, value) {
+    // console.log(field, value)
+    console.log("file received")
+    files.push(value)
+  })
+  form.on("end", function () {
+    console.log("otrzymano", files.length, "plikow")
+    if (files.length > 0) {
+      const myDirname = __dirname + "/music/" + uuid()
+      console.log("zakladam folder na album", myDirname)
+      fs.mkdirSync(myDirname)
+      for (i in files) {
+        console.log("plik:", files[i].name, files[i].path)
+        fs.renameSync(files[i].path, myDirname + "/" + files[i].name)
+      }
+    }
+    initSongs();
+    res.writeHead(200, { 'content-type': "text/plain" })
+    res.end("file saved")
+  })
+  form.parse(req, function (err, fields, files) {
+    console.log("bajtow w formularzu", form.bytesExpected, "otrzymanych:", form.bytesReceived)
+  })
 }
 
 function initSongs() {
+  albumy.splice(0)
+  piosenki.splice(0)
   let albumId = 0;
   let songId = 0;
   const folder = __dirname + "/music"
