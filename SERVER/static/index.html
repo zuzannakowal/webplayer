@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .under {
+            border: solid black 1px;
+        }
+
+        .over {
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="/upload" method="POST">
+        webplayer server
+    </form>
+    <div id="root" class="under">drag files here</div>
+    <script>
+
+        document.querySelector("html").ondragover = function (e) {
+            console.log("dragover nad dokumentem html")
+            e.preventDefault(); // usuwa domyślne zachowanie strony po wykonaniu zdarzenia, warto zakomentować i sprawdzić
+            e.stopPropagation(); // zatrzymuje dalszą propagację zdarzenia, warto zakomentować i sprawdzić
+        }
+
+
+        document.querySelector("html").ondrop = function (e) {
+            console.log("drop na dokumencie html")
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        document.querySelector("#root").ondragenter = function (e) {
+            console.log("drag enter na divie")
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+
+        document.querySelector("#root").ondragover = function (e) {
+            document.getElementById("root").className = "over"
+            console.log("drag over na divie")
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        document.querySelector("#root").ondragleave = function (e) {
+            console.log("dragleave na divie")
+            document.getElementById("root").className = "under"
+            e.stopPropagation();
+            e.preventDefault();
+
+        }
+
+        document.querySelector("#root").ondrop = function (e) {
+            document.getElementById("root").className = "under"
+            console.log("drop na divie")
+            e.stopPropagation();
+            e.preventDefault();
+
+            var files = e.dataTransfer.files;
+
+            console.log(files)
+
+            // teraz utwórz obiekt FormData zastępujący formularz - patrz poprzednie lekcje z uploadem
+            // oraz dodaj do niego po kolei wszystkie pliki z powyższej listy files
+            // na koniec użyj dowolnej technologii do uploadu pliku/ów - patrz poprzednie lekcje
+
+
+            var totalfiles = files.length;
+
+            if (totalfiles > 0) {
+
+                var formData = new FormData();
+
+                // Read selected files
+                for (var index = 0; index < totalfiles; index++) {
+                    formData.append("files[]", files[index]);
+                }
+
+                var xhttp = new XMLHttpRequest();
+
+                // Set POST method and ajax file path
+                xhttp.open("POST", "/upload", true);
+
+                // call on request changes state
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                        var response = this.responseText;
+
+                        alert(response + " File(s) uploaded.");
+
+                    }
+                };
+
+                // Send request with data
+                xhttp.send(formData);
+
+            }
+        }
+    </script>
+</body>
+
+</html>
