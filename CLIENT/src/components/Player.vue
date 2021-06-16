@@ -22,15 +22,13 @@
       }}
     </div>
     <div class="play">
-      <div @click="previous">&#8884;</div>
+      <div @click="previous">⏪</div>
       <div @click="playClicked">
-        <div v-if="currentSong === null">&#8883;</div>
-        <div v-if="currentSong !== null && currentSong.playing == 0">
-          &#8883;
-        </div>
-        <div v-if="currentSong !== null && currentSong.playing == 1">II</div>
+        <div v-if="currentSong === null">⏯</div>
+        <div v-if="currentSong !== null && currentSong.playing == 0">⏯</div>
+        <div v-if="currentSong !== null && currentSong.playing == 1">⏯</div>
       </div>
-      <div @click="next">&#8885;</div>
+      <div @click="next">⏩</div>
       <div>
         <input type="range" id="scroller" ref="scroll" min="0" value="0" />
       </div>
@@ -151,16 +149,19 @@ export default {
 .player {
   height: 100px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 .song {
-  width: 33%;
+  color: #778091;
+  margin-top: 30px;
+  width: 50%;
+  text-align: center;
 }
 .play {
-  width: 33%;
+  margin-top: 30px;
+  width: 50%;
   font-size: 25px;
-  border: solid black 1px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
 }
 </style>

@@ -8,10 +8,9 @@
         <songs @songSelected="songSelected" ref="songs"></songs>
       </div>
     </div>
-    <div>
+    <div class="dol">
       <player @prev="prev" @next="next" ref="player" :songs="piosenki"></player>
     </div>
-    <div>debug: {{ currentAlbum }}</div>
   </div>
 </template>
 <script>
@@ -75,22 +74,30 @@ export default {
 <style scoped>
 #app {
   font-size: 15px;
-  font-family: "Roboto", sans-serif;
-  color: blue;
+  font-family: "Courier New", monospace;
+  color: #c4523f;
+  background-color: #778091;
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
 div {
-  border: black solid 1px;
   margin: 5px;
 }
 .gora {
-  height: 500px;
+  height: 400px;
   display: flex;
   justify-content: flex-start;
+  background-color: #b3cbf9;
 }
 .albums {
   width: 110px;
+  padding-bottom: 10px;
+  background-color: cornflowerblue;
 }
 .songs {
   width: 100%;
+}
+.dol {
+  background-color: #f8bea6;
 }
 </style>
