@@ -4,7 +4,7 @@
       {{ song.num + 1 }} {{ song.tytul }} {{ Math.round(song.size) }} MB
     </div>
     <div v-else>
-      {{ song.num + 1 }} {{ song.tytul }} {{ Math.round(song.size) }} MB ++
+      {{ song.num + 1 }} {{ song.tytul }} {{ Math.round(song.size) }} MB
     </div>
   </div>
 </template>
